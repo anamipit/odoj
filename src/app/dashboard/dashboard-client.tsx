@@ -3,12 +3,10 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { logout } from "@/app/auth/actions";
 import { ReadingForm } from "./reading-form";
 import { ReadingChart } from "./reading-chart";
+import { StudentBottomNav } from "@/components/bottom-nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
 interface Props {
@@ -29,32 +27,18 @@ export function DashboardClient({ profile, initialReadings, totalJuz, totalPages
     }, [router]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 pb-20">
             <Toaster richColors position="top-center" />
 
             {/* Header */}
             <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-emerald-100">
-                <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
-                            📖 ODOJ Tracker
-                        </h1>
-                        <p className="text-xs text-muted-foreground">
-                            {profile?.full_name} · {profile?.class_name}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Link href="/leaderboard">
-                            <Button variant="ghost" size="sm" className="text-emerald-600 font-semibold">
-                                🏆
-                            </Button>
-                        </Link>
-                        <form action={logout}>
-                            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-600">
-                                Keluar
-                            </Button>
-                        </form>
-                    </div>
+                <div className="max-w-2xl mx-auto px-4 py-3">
+                    <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+                        📖 ODOJ Tracker
+                    </h1>
+                    <p className="text-xs text-muted-foreground">
+                        {profile?.full_name} · {profile?.class_name}
+                    </p>
                 </div>
             </header>
 
@@ -109,16 +93,9 @@ export function DashboardClient({ profile, initialReadings, totalJuz, totalPages
 
                 {/* Chart */}
                 <ReadingChart readings={initialReadings} />
-
-                {/* Leaderboard Link */}
-                <Link href="/leaderboard" className="block">
-                    <div className="rounded-xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-amber-50 p-4 text-center hover:shadow-md transition-shadow cursor-pointer">
-                        <span className="text-lg">🏆</span>
-                        <p className="text-sm font-semibold text-emerald-700 mt-1">Lihat Leaderboard</p>
-                        <p className="text-xs text-muted-foreground">Siapa pembaca terbaik hari ini?</p>
-                    </div>
-                </Link>
             </main>
+
+            <StudentBottomNav />
         </div>
     );
 }

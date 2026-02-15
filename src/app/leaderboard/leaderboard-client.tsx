@@ -2,18 +2,18 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Podium } from "./podium";
 import type { LeaderboardEntry } from "./actions";
+import { StudentBottomNav, AdminBottomNav } from "@/components/bottom-nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 interface Props {
     dailyData: LeaderboardEntry[];
     totalData: LeaderboardEntry[];
+    userRole: string;
 }
 
 function LeaderboardTable({ entries, metric }: { entries: LeaderboardEntry[]; metric: "pages" | "juz" }) {
@@ -64,7 +64,7 @@ function LeaderboardTable({ entries, metric }: { entries: LeaderboardEntry[]; me
     );
 }
 
-export function LeaderboardClient({ dailyData, totalData }: Props) {
+export function LeaderboardClient({ dailyData, totalData, userRole }: Props) {
     const [tab, setTab] = useState("daily");
     const today = new Date().toLocaleDateString("id-ID", {
         weekday: "long",
@@ -74,21 +74,14 @@ export function LeaderboardClient({ dailyData, totalData }: Props) {
     });
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 pb-20">
             {/* Header */}
             <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-emerald-100">
-                <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
-                            🏆 Leaderboard
-                        </h1>
-                        <p className="text-xs text-muted-foreground">{today}</p>
-                    </div>
-                    <Link href="/dashboard">
-                        <Button variant="ghost" size="sm" className="text-emerald-600">
-                            ← Dashboard
-                        </Button>
-                    </Link>
+                <div className="max-w-2xl mx-auto px-4 py-3">
+                    <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+                        🏆 Leaderboard
+                    </h1>
+                    <p className="text-xs text-muted-foreground">{today}</p>
                 </div>
             </header>
 
@@ -172,6 +165,8 @@ export function LeaderboardClient({ dailyData, totalData }: Props) {
                     </TabsContent>
                 </Tabs>
             </main>
+
+            {userRole === "admin" ? <AdminBottomNav /> : <StudentBottomNav />}
         </div>
     );
 }

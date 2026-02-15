@@ -14,10 +14,17 @@ export default async function LeaderboardPage() {
 
     if (!user) redirect("/login");
 
+    // Get user role for bottom nav
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
     const [daily, total] = await Promise.all([
         getDailyLeaderboard(),
         getTotalLeaderboard(),
     ]);
 
-    return <LeaderboardClient dailyData={daily} totalData={total} />;
+    return <LeaderboardClient dailyData={daily} totalData={total} userRole={profile?.role || "student"} />;
 }

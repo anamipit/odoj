@@ -3,10 +3,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { logout } from "@/app/auth/actions";
 import { toggleReadingsEnabled } from "./actions";
 import { AdminChart } from "./admin-chart";
 import { StudentDetailDialog } from "./student-detail-dialog";
+import { AdminBottomNav } from "@/components/bottom-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -72,23 +72,16 @@ export function AdminDashboardClient({ profile, aggregatedData, initialStudents,
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50">
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 pb-20">
             <Toaster richColors position="top-center" />
 
             {/* Header */}
             <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-emerald-100">
-                <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
-                            📖 ODOJ Admin
-                        </h1>
-                        <p className="text-xs text-muted-foreground">{profile.full_name}</p>
-                    </div>
-                    <form action={logout}>
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-600">
-                            Keluar
-                        </Button>
-                    </form>
+                <div className="max-w-4xl mx-auto px-4 py-3">
+                    <h1 className="text-lg font-bold bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+                        📖 ODOJ Admin
+                    </h1>
+                    <p className="text-xs text-muted-foreground">{profile.full_name}</p>
                 </div>
             </header>
 
@@ -224,6 +217,8 @@ export function AdminDashboardClient({ profile, aggregatedData, initialStudents,
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
             />
+
+            <AdminBottomNav />
         </div>
     );
 }
