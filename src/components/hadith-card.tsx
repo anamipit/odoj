@@ -1,7 +1,7 @@
 // src/components/hadith-card.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface HadithData {
@@ -13,32 +13,37 @@ interface HadithData {
 export function HadithCard() {
     const [hadith, setHadith] = useState<HadithData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState(false);
 
-    useEffect(() => {
-        // Check localStorage for cached hadith (same day = same hadith)
+    const fetchHadith = useCallback((force = false) => {
         const today = new Date().toISOString().split("T")[0];
-        const cached = localStorage.getItem("odoj_hadith");
 
-        if (cached) {
-            try {
-                const parsed = JSON.parse(cached);
-                if (parsed.date === today && parsed.data) {
-                    setHadith(parsed.data);
-                    setLoading(false);
-                    return;
+        // Use cache only on initial load, not on forced refresh
+        if (!force) {
+            const cached = localStorage.getItem("odoj_hadith");
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    if (parsed.date === today && parsed.data) {
+                        setHadith(parsed.data);
+                        setLoading(false);
+                        return;
+                    }
+                } catch {
+                    // Invalid cache, fetch fresh
                 }
-            } catch {
-                // Invalid cache, fetch fresh
             }
         }
+
+        if (force) setRefreshing(true);
 
         fetch("https://api.myquran.com/v3/hadis/enc/random")
             .then((res) => res.json())
             .then((json) => {
                 if (json.status && json.data) {
                     setHadith(json.data);
-                    // Cache for the day to avoid unnecessary API calls
+                    setError(false);
                     localStorage.setItem(
                         "odoj_hadith",
                         JSON.stringify({ date: today, data: json.data })
@@ -48,8 +53,15 @@ export function HadithCard() {
                 }
             })
             .catch(() => setError(true))
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setLoading(false);
+                setRefreshing(false);
+            });
     }, []);
+
+    useEffect(() => {
+        fetchHadith(false);
+    }, [fetchHadith]);
 
     if (loading) {
         return (
@@ -76,9 +88,19 @@ export function HadithCard() {
         <Card className="border-amber-100 shadow-md overflow-hidden bg-gradient-to-br from-amber-50/80 to-orange-50/50">
             <CardContent className="p-4 space-y-3">
                 {/* Title */}
-                <div className="flex items-center gap-2">
-                    <span className="text-lg">📜</span>
-                    <h3 className="text-sm font-bold text-amber-800">Hadis Hari Ini</h3>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <span className="text-lg">📜</span>
+                        <h3 className="text-sm font-bold text-amber-800">Hadis Hari Ini</h3>
+                    </div>
+                    <button
+                        onClick={() => fetchHadith(true)}
+                        disabled={refreshing}
+                        className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-amber-200/50 transition-colors text-amber-600 disabled:opacity-40"
+                        title="Hadis baru"
+                    >
+                        <span className={`text-sm ${refreshing ? "animate-spin" : ""}`}>🔄</span>
+                    </button>
                 </div>
 
                 {/* Arabic text */}
