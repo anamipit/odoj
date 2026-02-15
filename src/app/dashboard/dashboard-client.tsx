@@ -7,6 +7,7 @@ import { ReadingForm } from "./reading-form";
 import { ReadingChart } from "./reading-chart";
 import { StudentBottomNav } from "@/components/bottom-nav";
 import { HadithCard } from "@/components/hadith-card";
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { BookOpen, Pause } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/sonner";
@@ -118,6 +119,7 @@ export function DashboardClient({ profile, initialReadings, totalJuz, totalPages
                 <HadithCard />
             </main>
 
+            <PwaInstallPrompt />
             <StudentBottomNav />
         </div>
     );

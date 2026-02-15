@@ -3,7 +3,7 @@
     "short_name": "ODOJ",
     "description": "One Day One Juz — Aplikasi pelacak tilawah Al-Quran harian selama Ramadan",
     "start_url": "/dashboard",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#f0fdf4",
     "theme_color": "#059669",
     "orientation": "portrait",
