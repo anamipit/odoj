@@ -3,38 +3,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-import { unstable_cache } from "next/cache";
 
-export const getAllReadingsAggregated = unstable_cache(
-    async () => {
-        const supabase = await createClient();
-
-        // Get all readings, aggregated by date
-        const { data, error } = await supabase
-            .from("readings")
-            .select("date, total_pages")
-            .order("date", { ascending: true });
-
-        if (error) {
-            console.error("Error fetching aggregated readings:", error);
-            return [];
-        }
-
-        // Group by date and sum pages
-        const dailyMap = new Map<string, number>();
-        (data || []).forEach((r) => {
-            const current = dailyMap.get(r.date) || 0;
-            dailyMap.set(r.date, current + r.total_pages);
-        });
-
-        return Array.from(dailyMap.entries()).map(([date, totalPages]) => ({
-            date,
-            totalPages,
-        }));
-    },
-    ["aggregated-readings"],
-    { revalidate: 300 }
-);
 
 export async function getStudentList(classFilter?: string) {
     const supabase = await createClient();

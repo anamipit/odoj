@@ -1,7 +1,8 @@
 // src/app/admin/page.tsx
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getAdminProfile, getAllReadingsAggregated, getStudentList, getReadingsEnabled } from "./actions";
+import { getAdminProfile, getStudentList, getReadingsEnabled } from "./actions";
+import { getAllReadingsAggregated } from "./queries";
 import { AdminDashboardClient } from "./admin-client";
 
 export const metadata = {
