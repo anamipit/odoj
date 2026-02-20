@@ -11,6 +11,7 @@ import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { BookOpen, Pause } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/sonner";
+import { RamadhanCalendar } from "./ramadhan-calendar";
 
 interface Props {
     profile: { full_name: string; class_name: string; role: string } | null;
@@ -87,6 +88,9 @@ export function DashboardClient({ profile, initialReadings, totalJuz, totalPages
                         />
                     </div>
                 </div>
+
+                {/* Ramadhan Calendar */}
+                <RamadhanCalendar readings={initialReadings} />
 
                 {/* Reading Form — client-only to prevent Radix ID hydration mismatch */}
                 {!mounted ? (

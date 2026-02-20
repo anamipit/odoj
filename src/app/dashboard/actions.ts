@@ -51,9 +51,13 @@ export async function submitReading(formData: FormData) {
             startSurah, startAyah, endSurah, endAyah
         );
 
+        // Calculate date in WIB (UTC+7)
+        // We add 7 hours to current UTC time to get the date in Indonesia
+        const wibDate = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().split("T")[0];
+
         const { error } = await supabase.from("readings").insert({
             user_id: user.id,
-            date: new Date().toISOString().split("T")[0],
+            date: wibDate,
             start_surah: startSurah,
             start_ayah: startAyah,
             end_surah: endSurah,

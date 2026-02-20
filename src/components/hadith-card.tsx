@@ -85,10 +85,7 @@ export function HadithCard() {
 
     if (error || !hadith) return null;
 
-    // Truncate long hadith text for display
-    const idText = hadith.text.id.length > 300
-        ? hadith.text.id.substring(0, 300) + "..."
-        : hadith.text.id;
+
 
     return (
         <Card className="border-amber-100 shadow-md overflow-hidden bg-gradient-to-br from-amber-50/80 to-orange-50/50">
@@ -114,16 +111,14 @@ export function HadithCard() {
                     dir="rtl"
                     className="text-base leading-loose text-gray-800 font-serif text-right"
                 >
-                    {hadith.text.ar.length > 200
-                        ? hadith.text.ar.substring(0, 200) + "..."
-                        : hadith.text.ar}
+                    {hadith.text.ar}
                 </p>
 
                 {/* Divider */}
                 <div className="border-t border-amber-200/60" />
 
                 {/* Indonesian translation */}
-                <p className="text-sm text-gray-700 leading-relaxed">{idText}</p>
+                <p className="text-sm text-gray-700 leading-relaxed">{hadith.text.id}</p>
 
                 {/* Grade & Takhrij */}
                 <div className="flex flex-wrap items-center gap-2 pt-1">
